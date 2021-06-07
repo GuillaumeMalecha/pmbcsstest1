@@ -20,7 +20,7 @@ html,body{
 body#pmbopac, #intro #intro_bibli .p2 ul li, .cms_menu_deep0 li, ul.search_tabs li, #onglets_list ul.list_tabs li,
 #empr_onglet ul.empr_tabs li, input.bouton, input.boutonrechercher, #subs_form table td input,
 .carroussel_bulletin .current_bull_carroussel, .carroussel_bulletin .active, th, ul.empr_subtabs li, .authorities {
-	background-color : #d0c6b4;
+	background-color : #222;
 }
 
 #intro_message .p1 {
@@ -61,7 +61,7 @@ body, #intro_message .p1 p, #main #search ul.search_tabs li#current, #onglets_li
 /* ---------------------------------------------------------------------------*/
 /*                         ATTRIBUTS GENERAUX                                 */
 /*                                                                            */
-/*                     attrbitus generaux de la page                          */
+/*                     attributs généraux de la page                          */
 /* ---------------------------------------------------------------------------*/
 /* ---------------------------------------------------------------------------*/
 
@@ -78,7 +78,7 @@ body {
 
 #container {
 	margin : 0px auto;
-	width: 985px;
+	width: 1000px;
 	background-color : #ffffff;
 	position: relative;
 	min-height: 100%;
@@ -183,12 +183,15 @@ iframe#iframe_resume_panier {
 #intro_bibli .p2 ul li, #intro_bibli .p2 #menuDeroulant li, .cms_menu_deep0 li {
     display: block;
     float: left;
+	margin-left: 30px;
 	margin-right: 5px;
-	padding-top: 5px;
-	padding-left: 10px;
-	padding-right: 10px;
-	padding-bottom: 5px;
+	/*margin-top: 10px;*/
+	padding-top: 6px;
+	padding-left: 12px;
+	padding-right: 12px;
+	padding-bottom: 6px;
 	position: relative;
+	border-radius: 5px;
 }
 
 #intro_bibli .p2 ul li:hover, #intro_bibli .p2 #menuDeroulant li:hover, .cms_menu_deep0 li:hover {
@@ -503,42 +506,53 @@ iframe#iframe_resume_panier {
 
 
 #search {
-    padding-left: 15px;
+    padding-left: 25px;
     padding-bottom: 15px;
     padding-right: 15px;
-    margin-top: 25px;
-    margin-bottom: 15px;
+    margin-top: 45px;
+    margin-bottom: 25px;
 }
 	
 #main #search ul.search_tabs, #onglets_list ul.list_tabs {
-    margin-top: -23px;
+    margin-top: -35px;
     margin-left: -16px;
-    font-size: 1.166666em;
+    font-size: 1.25em;
 }
 
 #main #search ul.search_tabs li, #onglets_list ul.list_tabs li, #empr_onglet ul.empr_tabs li {
 	display: block;
 	float: left;
-	padding-top: 3px;
-	padding-bottom: 3px;
-	padding-left: 10px;
-	padding-right: 10px;
-    margin-right: 5px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 15px;
+	padding-right: 15px;
+    margin-right: 15px;
     margin-bottom: 5px;
-  
+	border-radius:2em;
+
+
 }
 
 #main #search ul.search_tabs li:hover, #onglets_list ul.list_tabs li:hover, #empr_onglet ul.empr_tabs li:hover {
-	padding-bottom: 5px;
+	/*padding-bottom: 5px;
 	padding-top: 5px;
 	margin-top: -4px;
+	background-color: tomato;
+	 */
+	transform: scale(1.05);
+	transition : all 0.2s ease-in-out;
 }
+
 
 #main #search ul.search_tabs li#current:hover, #onglets_list ul.list_tabs li#current:hover,
 #empr_onglet ul.empr_tabs li#current:hover {
-	padding-top: 3px;
+	/*padding-top: 3px;
 	padding-bottom: 3px;
 	margin-top: 0px;
+
+	 */
+	background-color: dimgrey;
+
 }
 
 #main #search ul.search_tabs li a, #onglets_list ul.list_tabs li a, #empr_onglet ul.empr_tabs li a {
@@ -574,8 +588,10 @@ iframe#iframe_resume_panier {
 
 input.bouton, input.boutonrechercher {
 	color: #ffffff;
-	margin-left: 5px;
+	margin-left: 10px;
+	padding: 3px;
 	cursor: pointer;
+	border-radius:2em;
 }
 
 #search form #simple_search_zone {
