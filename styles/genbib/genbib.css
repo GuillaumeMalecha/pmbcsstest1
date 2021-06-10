@@ -845,15 +845,20 @@ input#a2z_abt_actif {
     padding-bottom: 20px;
     padding-right: 40px;
     margin-bottom: 15px;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+
 }
 
 #categories-container a {
     text-decoration: none;
+	display: flex;
 }
 
 #categories-container h2 {
-	font-size: 13px;
-	margin-top: 5px;
+	font-size: 16px;
+	margin-top: 15px;
 }
 
 #categories-container h2 img {
@@ -863,10 +868,12 @@ input#a2z_abt_actif {
 #categories-container ul {
 	margin-top: 2px;
 	padding-bottom: 5px;
+	height: 60px;
+	width: 200px;
 }
 
 #categories-container li  {
-	display: inline;
+	display: block;
 }
 
 #aut_see {
