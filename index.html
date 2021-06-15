@@ -434,13 +434,64 @@
             <h3>Adresse</h3>
 
             <span>
-			Bib'Doc<br>
-			ZI de Mont/Loir
-BP 10023<br>
-			72500 CHATEAU DU LOIR<br>
-			France&nbsp;<br>
-			02 43 440 660<br><span id="opac_biblio_email">
-			<a href="mailto:pmb@sigb.net" title="pmb@sigb.net">contact</a></span></span>
+                <p>Sélectionnez votre centre de documentation</p>
+    <button class="cdbutton" onclick="Ilo()">Ilo Citoyen</button></br>
+    <button class="cdbutton" onclick="Eureka()">Eurêka</button></br>
+    <button class="cdbutton" onclick="MVW()">MVW</button></br>
+    <button class="cdbutton" onclick="BDW()">MVW-BDW</button></br>
+    <button class="cdbutton" onclick="FHMW()">MVW-FHMW</button></br>
+    <button class="cdbutton" onclick="ARBAL()">ARBAL</button>
+    <p id="demo"></p>
+    <script>
+      function Ilo() {
+          document.getElementById("demo").innerHTML =
+              "</br><h4>Les Chiroux</h4>" +
+              "Centre Culturel de Liège</br>" +
+              "Place des Carmes, 8 - 4000 Liège</br>" +
+              "T : +32(0)4 223 19 60</br>" +
+              "E : <a href=\"mailto:info@chiroux.be\">info@chiroux.be</a>";
+      }
+      function Eureka() {
+          document.getElementById("demo").innerHTML =
+              "</br><h4>Espace Eurêka</h4>" +
+              "Centre de documentation pédagogique</br>" +
+              "Maison Provinciale de la Formation</br>" +
+              "Rue Cockerill, 101 - 4100 Seraing</br>" +
+              "T : +32(0)4 279 34 97</br>" +
+              "E : <a href=\"mailto:espace.eureka@provincedeliege.be\">espace.eureka@provincedeliege.be</a>";
+      }
+      function MVW() {
+          document.getElementById("demo").innerHTML =
+              "</br><h4>Musée de la Vie wallonne</h4>" +
+              "Cour des Mineurs - 4000 Liège</br>" +
+              "T : +32(0)4 279 20 31</br>" +
+              "E : <a href=\"mailto:info@viewallonne.be\">info@viewallonne.be</a>";
+
+      }
+      function BDW() {
+          document.getElementById("demo").innerHTML =
+              "</br><h4>Bibliothèque des Dialectes de Wallonie</h4>" +
+              "Musée de la Vie wallonne</br>" +
+              "Rue Moray 3 - 4000 Liège</br>" +
+              "T : +32(0)4 229 28 50</br>" +
+              "E : <a href=\"mailto:bdw@viewallonne.be\">bdw@viewallonne.be</a>";
+      }
+      function FHMW() {
+          document.getElementById("demo").innerHTML =
+              "</br><h4>Fonds d'Histoire du Mouvement Wallon</h4>" +
+              "Musée de la Vie wallonne</br>" +
+              "Cour des Mineurs - 4000 Liège</br>" +
+              "T : +32(0)4 229 28 56</br>" +
+              "E : <a href=\"mailto:fhmw@viewallonne.be\">fhmw@viewallonne.be</a>";
+      }
+      function ARBAL() {
+          document.getElementById("demo").innerHTML =
+              "</br><h4>Académie Royale des Beaux-Arts de Liège</h4>" +
+              "Rue des Anglais 21 - 4000 Liège</br>" +
+              "T : +32(0)4 221 70 72</br>" +
+              "E : <a href=\"mailto:f.vanreeth@intra-esavl.be\">f.vanreeth@intra-esavl.be</a>";
+      }
+    </script></span>
         </div><!-- fermeture #adresse --></div><div id="bandeau_2"></div></div><!-- /div id=container -->
 
 <script type="text/javascript">init_drag();	//rechercher!!</script>

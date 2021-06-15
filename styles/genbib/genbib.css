@@ -11,6 +11,16 @@
 /*                             COULEURS                                       */
 /* ---------------------------------------------------------------------------*/
 /* ---------------------------------------------------------------------------*/
+@media screen and (max-width: 700px)
+{
+	#bandeau{
+		visibility: hidden;
+	}
+
+	#main_header{
+		visibility: hidden;
+	}
+}
 
 html,body{
 	height:100%;
@@ -78,7 +88,7 @@ body {
 
 #container {
 	margin : 0px auto;
-	width: 1000px;
+	width: 80%;
 	background-color : #ffffff;
 	position: relative;
 	min-height: 100%;
@@ -124,7 +134,8 @@ iframe#iframe_resume_panier {
 #intro {
 	position: absolute;
 	top: 0px;
-	width: 985px;
+	width: 100%;
+	justify-content: space-between;
 }
 
 #intro #intro_bibli h3 {
@@ -166,7 +177,7 @@ iframe#iframe_resume_panier {
 
 
 #intro #intro_bibli .p2 {
-	margin-left: 200px;
+	margin-left: 30%;
 	display: block;
 	height: 40px;
 	/* position: absolute; */
@@ -195,14 +206,13 @@ iframe#iframe_resume_panier {
 }
 
 #intro_bibli .p2 ul li:hover, #intro_bibli .p2 #menuDeroulant li:hover, .cms_menu_deep0 li:hover {
-	padding-bottom: 10px;
+	padding-bottom: 100px;
 	height: 31px;
-	padding-bottom: 0px;
 }
 
 #intro_bibli .p2 ul li a, #intro_bibli .p2 #menuDeroulant li a, .cms_menu_deep0 li a {
     color: #ffffff;
-	font-size: 18px;
+	font-size: 20px;
 	text-decoration: none;
 }
 
@@ -270,7 +280,7 @@ iframe#iframe_resume_panier {
 
 
 #bandeau {
-	 width: 170px;
+	 width: 200px;
 	 padding-left: 10px;
 	 background-color: #ffffff;
 	 float: left;
@@ -308,7 +318,7 @@ iframe#iframe_resume_panier {
 
 #bandeau #accueil p.centered img {
 	border: none;
-	max-width: 150px;
+	max-width: 200px;
 	margin-bottom: 10px;
 }
 
@@ -321,7 +331,7 @@ iframe#iframe_resume_panier {
 	padding-left: 10px;
 	padding-top: 5px;
 	padding-bottom: 5px;
-	width: 160px;
+	width: 220px;
 }
 
 #bandeau #accueil #lang_select form {
@@ -345,12 +355,14 @@ iframe#iframe_resume_panier {
 #connexion h3 {
 	margin-bottom: 5px;
 	margin-top: 10px;
-	font-size: 13px;
+	font-size: 16px;
+	margin-left: 5px;
 }
 
 #connexion #login_form form {
-	margin: 0px;
 	padding: 0px;
+	margin-left: 5px;
+
 }
 
 
@@ -358,9 +370,11 @@ iframe#iframe_resume_panier {
 
 
 #connexion #login_form input.login, #connexion #login_form input.password {
-	width: 110px;
+	width: 150px;
 	margin-top: 5px;
 	margin-bottom: 5px;
+	margin-left: 5px;
+
 }
 
 #connexion #login_form input.bouton {
@@ -391,12 +405,16 @@ iframe#iframe_resume_panier {
 	margin-bottom: 5px;
 	margin-top: 20px;
 	font-size: 13px;
+	margin-left: 5px;
+
 }
 
 #adresse #opac_biblio_email {
 	font-weight: bold;
 	font-style: italic;
 	font-size: 13px;
+	margin-left: 5px;
+
 }
 
 
@@ -426,7 +444,7 @@ iframe#iframe_resume_panier {
 #main {
 	margin-right: 20px;
 	float: right;
-	width: 765px;
+	width: 75%;
 }
 
 #main h3 {
@@ -541,6 +559,17 @@ iframe#iframe_resume_panier {
 	 */
 	transform: scale(1.05);
 	transition : all 0.2s ease-in-out;
+}
+
+.cdbutton {
+	padding-top: 3px;
+	padding-bottom: 3px;
+	padding-left: 5px;
+	padding-right: 5px;
+	margin-right: 5px;
+	margin-bottom: 5px;
+	border-radius:2em;
+	opacity: 65%;
 }
 
 
