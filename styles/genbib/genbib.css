@@ -206,7 +206,7 @@ iframe#iframe_resume_panier {
 }
 
 #intro_bibli .p2 ul li:hover, #intro_bibli .p2 #menuDeroulant li:hover, .cms_menu_deep0 li:hover {
-	padding-bottom: 100px;
+	padding-bottom: 3px;
 	height: 31px;
 }
 
