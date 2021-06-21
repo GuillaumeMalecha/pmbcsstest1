@@ -242,7 +242,7 @@
 
     </div><div id="infopages"><p><b>Astuce</b> utilisez des guillemets pour chercher une suite de caractères : "révolution française"</p></div>
     <div id="categories">
-        <h3><span id="titre_categories">Catégories</span></h3>
+        <h3><span id="titre_categories">Catégories générales</span></h3>
 
         <div id="categories-container">
             <div class="row_categ"><div class="category">
@@ -336,8 +336,17 @@
                 <div class="clear"></div>
             </ul>
         </div>
+                <div class="category">&nbsp;</div><div class="category">&nbsp;</div></div><div class="div_clr"></div>
+        </div>
+
+        <h3><span id="titre_categories" >Catégories par Centres de Documentation<p id="select_categories"></p></span></h3>
+        <div id="categories-container">
+            <div class="row_categ">
+                <p id="select_categories_elements"></p>
+
             <div class="category">&nbsp;</div><div class="category">&nbsp;</div></div><div class="div_clr"></div>
         </div>
+
         <div style="clear: both; visibility: hidden; display: none;" id="category_bloc_sep">&nbsp;</div>
     </div>
     <div id="location"><h3><span>Vous n'avez pas d'idée pour chercher ? Entrez dans la bibliothèque...</span></h3><div id="location-container"><table width="100%" align="center"><tbody><tr><td align="center">
@@ -431,16 +440,17 @@
         </div><!-- fermeture #connexion -->
         <div id="adresse">
 
-            <h3>Adresse</h3>
+
 
             <span>
-                <p>Sélectionnez votre centre de documentation</p>
+                <h3>Sélectionnez votre centre de documentation</h3>
     <button class="cdbutton" onclick="Ilo()">Ilo Citoyen</button></br>
     <button class="cdbutton" onclick="Eureka()">Eurêka</button></br>
     <button class="cdbutton" onclick="MVW()">MVW</button></br>
     <button class="cdbutton" onclick="BDW()">MVW-BDW</button></br>
     <button class="cdbutton" onclick="FHMW()">MVW-FHMW</button></br>
     <button class="cdbutton" onclick="ARBAL()">ARBAL</button>
+    <h3>Adresse</h3>
     <p id="demo"></p>
     <script>
       function Ilo() {
@@ -450,6 +460,38 @@
               "Place des Carmes, 8 - 4000 Liège</br>" +
               "T : +32(0)4 223 19 60</br>" +
               "E : <a href=\"mailto:info@chiroux.be\">info@chiroux.be</a>";
+
+          document.getElementById("select_categories").innerHTML =
+              "<h4>Les Chiroux</h4>";
+
+          document.getElementById("select_categories_elements").innerHTML =
+              "<div class=\"category\">" +
+              "                <h2><img src=\"./images/folder.gif\"><i class=\"fas fa-book fa-2x\"></i><a href=\"./index.php?&amp;lvl=categ_see&amp;id=1378&amp;main=1&amp;id_thes=1\">Art et culture</a></h2>" +
+              "                <ul>" +
+              "                    <li><a href=\"./index.php?lvl=categ_see&amp;id=1390&amp;main=1&amp;id_thes=1\">Architecture</a></li>" +
+              "                    <li><a href=\"./index.php?lvl=categ_see&amp;id=1391&amp;main=1&amp;id_thes=1\">Bande dessinée</a></li>" +
+              "                    <li><a href=\"./index.php?lvl=categ_see&amp;id=1392&amp;main=1&amp;id_thes=1\">Cinéma</a></li>" +
+              "                    ..." +
+              "                    <div class=\"clear\"></div>" +
+              "                </ul>" +
+              "            </div>" +
+              "                <div class=\"category\">" +
+              "                    <h2><img src=\"./images/folder.gif\"><i class=\"fas fa-vote-yea fa-2x\"></i><a href=\"./index.php?&amp;lvl=categ_see&amp;id=1379&amp;main=1&amp;id_thes=1\">Institutions et politique</a></h2>" +
+              "                    <ul>" +
+              "                        <li><a href=\"./index.php?lvl=categ_see&amp;id=2488&amp;main=1&amp;id_thes=1\">Histoire politique</a></li>" +
+              "\n" +
+              "                        <div class=\"clear\"></div>" +
+              "                    </ul>" +
+              "                </div>" +
+              "                <div class=\"category\">\n" +
+              "                    <h2><img src=\"./images/folder.gif\"><i class=\"fas fa-child fa-2x\"></i><a href=\"./index.php?&amp;lvl=categ_see&amp;id=1380&amp;main=1&amp;id_thes=1\">Jeunesse</a></h2>\n" +
+              "                    <ul>\n" +
+              "                        <li><a href=\"./index.php?lvl=categ_see&amp;id=1522&amp;main=1&amp;id_thes=1\">Art et culture</a></li>\n" +
+              "                        <li><a href=\"./index.php?lvl=categ_see&amp;id=1517&amp;main=1&amp;id_thes=1\">Découvrir le monde</a></li>\n" +
+              "                        <li><a href=\"./index.php?lvl=categ_see&amp;id=1519&amp;main=1&amp;id_thes=1\">Sports et loisirs</a></li>\n" +
+              "                        ...\n" +
+              "                        <div class=\"clear\"></div>\n" +
+              "                    </ul>\n";
       }
       function Eureka() {
           document.getElementById("demo").innerHTML =
@@ -459,14 +501,59 @@
               "Rue Cockerill, 101 - 4100 Seraing</br>" +
               "T : +32(0)4 279 34 97</br>" +
               "E : <a href=\"mailto:espace.eureka@provincedeliege.be\">espace.eureka@provincedeliege.be</a>";
+
+          document.getElementById("select_categories").innerHTML =
+              "<h4>Espace Eurêka</h4>";
+
+          document.getElementById("select_categories_elements").innerHTML =
+              "<div class=\"category\">" +
+              "                <h2><img src=\"./images/folder.gif\"><i class=\"fas fa-people-arrows fa-2x\"></i><a href=\"./index.php?&amp;lvl=categ_see&amp;id=1382&amp;main=1&amp;id_thes=1\">Sciences humaines</a></h2>" +
+              "                <ul>" +
+              "                    <li><a href=\"./index.php?lvl=categ_see&amp;id=1390&amp;main=1&amp;id_thes=1\">Histoire</a></li>" +
+
+              "                    <div class=\"clear\"></div>" +
+              "                </ul>" +
+              "            </div>" +
+              "                <div class=\"category\">" +
+              "                    <h2><img src=\"./images/folder.gif\"><i class=\"fas fa-city fa-2x\"></i><a href=\"./index.php?&amp;lvl=categ_see&amp;id=1383&amp;main=1&amp;id_thes=1\">Société</a></h2>" +
+              "                    <ul>" +
+              "                        <li><a href=\"./index.php?lvl=categ_see&amp;id=2488&amp;main=1&amp;id_thes=1\">Emploi</a></li>" +
+              "                        <li><a href=\"./index.php?lvl=categ_see&amp;id=2488&amp;main=1&amp;id_thes=1\">Vivre ensemble</a></li>" +
+              "\n" +
+              "                        <div class=\"clear\"></div>" +
+              "                    </ul>" +
+              "                </div>";
       }
       function MVW() {
           document.getElementById("demo").innerHTML =
-              "</br><h4>Musée de la Vie wallonne</h4>" +
+              "</br><h4>Musée de la Vie Wallonne</h4>" +
               "Cour des Mineurs - 4000 Liège</br>" +
               "T : +32(0)4 279 20 31</br>" +
               "E : <a href=\"mailto:info@viewallonne.be\">info@viewallonne.be</a>";
 
+          document.getElementById("select_categories").innerHTML =
+              "<h4>Musée de la Vie Wallonne</h4>";
+
+          document.getElementById("select_categories_elements").innerHTML =
+              "<div class=\"category\">" +
+              "                <h2><img src=\"./images/folder.gif\"><i class=\"fas fa-book fa-2x\"></i><a href=\"./index.php?&amp;lvl=categ_see&amp;id=1378&amp;main=1&amp;id_thes=1\">Art et culture</a></h2>" +
+              "                <ul>" +
+              "                    <li><a href=\"./index.php?lvl=categ_see&amp;id=1390&amp;main=1&amp;id_thes=1\">Architecture</a></li>" +
+              "                    <li><a href=\"./index.php?lvl=categ_see&amp;id=1391&amp;main=1&amp;id_thes=1\">Bande dessinée</a></li>" +
+              "                    <li><a href=\"./index.php?lvl=categ_see&amp;id=1392&amp;main=1&amp;id_thes=1\">Cinéma</a></li>" +
+              "                    ..." +
+              "                    <div class=\"clear\"></div>" +
+              "                </ul>" +
+              "            </div>" +
+              "                <div class=\"category\">" +
+              "                    <h2><img src=\"./images/folder.gif\"><i class=\"fas fa-city fa-2x\"></i><a href=\"./index.php?&amp;lvl=categ_see&amp;id=1383&amp;main=1&amp;id_thes=1\">Société</a></h2>" +
+              "                    <ul>" +
+              "                        <li><a href=\"./index.php?lvl=categ_see&amp;id=2488&amp;main=1&amp;id_thes=1\">Emploi</a></li>" +
+              "                        <li><a href=\"./index.php?lvl=categ_see&amp;id=2488&amp;main=1&amp;id_thes=1\">Vivre ensemble</a></li>" +
+              "\n" +
+              "                        <div class=\"clear\"></div>" +
+              "                    </ul>" +
+              "                </div>";
       }
       function BDW() {
           document.getElementById("demo").innerHTML =
