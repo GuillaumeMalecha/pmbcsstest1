@@ -161,9 +161,9 @@ iframe#iframe_resume_panier {
 	border-top: none;
 	border-bottom: none;
 	overflow: hidden;
-	max-height: 211px;
+	max-height: 250px;
 	height: auto !important;
-	height: 211px;
+	height: 260px;
 	height: expression(this.height > 211px ? "211px" : true);
 	display: inline;
 	margin-right: 2px;

@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="PMB Group">
+
+    <meta name="keywords" content="OPAC, web, library, opensource, catalog, catalogue, bibliothèque, médiathèque, pmb, phpmybibli">
+    <meta name="description" content="Catalogue en ligne Bib'Doc.">
+    <meta name="robots" content="all">
+    <!--IE et son enfer de compatibilit?-->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <title>Catalogue en ligne Bib'Doc</title>
+
+
+    <link rel="stylesheet" type="text/css" href="./genbib/">
+    <link rel="stylesheet" type="text/css" href="./styles/common/contrib.css?1531390999">
+    <link rel="stylesheet" type="text/css" href="./styles/common/dGrowl.css?1458291775">
+    <link rel="stylesheet" type="text/css" href="./styles/common/font-awesome.css?1478593624">
+    <link rel="stylesheet" type="text/css" href="./styles/common/open-sans.css?1479312986">
+    <link rel="stylesheet" type="text/css" href="./styles/common/pagination.css?1532013719">
+    <link rel="stylesheet" type="text/css" href="./styles/common/record_display.css?1540561029">
+    <link rel="stylesheet" type="text/css" href="./styles/genbib/colonnes.css?1343806866">
+    <link rel="stylesheet" type="text/css" href="./styles/genbib/gallerie_photos.css?1297066640">
+    <link rel="stylesheet" type="text/css" href="./styles/genbib/genbib.css?1498048756">
+    <link rel="stylesheet" type="text/css" href="./styles/genbib/liste_bulletins.css?1297066639">
+    <link rel="stylesheet" type="text/css" href="./styles/genbib/print.css?1297066639">
+    <link rel="stylesheet" type="text/css" href="./styles/genbib/tags.css?1297066639">
+    <link rel="stylesheet" type="text/css" href="./styles/genbib/visionneuse.css?1297066640"><script type="text/javascript">var opac_style= 'genbib';</script>
+    <!-- css_authentication -->	<link rel="SHORTCUT ICON" href="images/site/favicon.ico">
+    <script type="text/javascript" src="includes/javascript/drag_n_drop.js"></script>
+    <script type="text/javascript" src="includes/javascript/handle_drop.js"></script>
+    <script type="text/javascript" src="includes/javascript/popup.js"></script>
+    <script type="text/javascript">
+        if (!document.getElementsByClassName){ // pour ie
+            document.getElementsByClassName =
+                function(nom_class){
+                    var items=new Array();
+                    var count=0;
+                    for (var i=0; i<document.getElementsByTagName('*').length; i++) {
+                        if (document.getElementsByTagName('*').item(i).className == nom_class) {
+                            items[count++] = document.getElementsByTagName('*').item(i);
+                        }
+                    }
+                    return items;
+                }
+        }
+        // Fonction a utilisier pour l'encodage des URLs en javascript
+        function encode_URL(data){
+            var docCharSet = document.characterSet ? document.characterSet : document.charset;
+            if(docCharSet == "UTF-8"){
+                return encodeURIComponent(data);
+            }else{
+                return escape(data);
+            }
+        }
+    </script>
+
+    <link rel="stylesheet" type="text/css" href="./includes/javascript/dojo/dijit/themes/tundra/tundra.css">
+    <script type="text/javascript">
+        var dojoConfig = {
+            parseOnLoad: true,
+            locale: 'fr-fr',
+            isDebug: false,
+            usePlainJson: true,
+            packages: [{
+                name: 'pmbBase',
+                location:'../../../..'
+            },{
+                name: 'd3',
+                location:'../../d3'
+            }],
+            deps: ['apps/pmb/MessagesStore', 'dgrowl/dGrowl', 'dojo/ready'],
+            callback:function(MessagesStore, dGrowl, ready){
+                window.pmbDojo = {};
+                pmbDojo.messages = new MessagesStore({url:'./ajax.php?module=ajax&categ=messages', directInit:false});
+                ready(function(){
+                    new dGrowl({'channels':[{'name':'info','pos':2},{'name':'error', 'pos':1}]});
+                });
+
+            },
+        };
+    </script>
+    <script type="text/javascript" src="./includes/javascript/dojo/dojo/dojo.js"></script>
+    <script type="text/javascript">var opac_show_social_network =0;</script>
+    <script type="text/javascript" src="./includes/javascript/http_request.js"></script>
+    <script src="https://kit.fontawesome.com/338db63432.js" crossorigin="anonymous"></script>
+
+</head>
+<body onload="window.defaultStatus='PMB : Accès public';" id="pmbopac">
+<script type="text/javascript">
+    function findNoticeElement(id){
+        var ul=null;
+        //cas des notices classiques
+        var domNotice = document.getElementById('el'+id+'Child');
+        //notice_display
+        if(!domNotice) domNotice = document.getElementById('notice');
+        if(domNotice){
+            var uls = domNotice.getElementsByTagName('ul');
+            for (var i=0 ; i<uls.length ; i++){
+                if(uls[i].getAttribute('id') == 'onglets_isbd_public'+id){
+                    var ul = uls[i];
+                    break;
+                }
+            }
+        } else{
+            var li = document.getElementById('onglet_isbd'+id);
+            if(!li) var li = document.getElementById('onglet_public'+id);
+            if(!li) var li = document.getElementById('onglet_detail'+id);
+            if(li) var ul = li.parentNode;
+        }
+        return ul;
+    }
+    function show_what(quoi, id) {
+        switch(quoi){
+            case 'EXPL_LOC' :
+                document.getElementById('div_expl_loc' + id).style.display = 'block';
+                document.getElementById('div_expl' + id).style.display = 'none';
+                document.getElementById('onglet_expl' + id).className = 'isbd_public_inactive';
+                document.getElementById('onglet_expl_loc' + id).className = 'isbd_public_active';
+                break;
+            case 'EXPL' :
+                document.getElementById('div_expl_loc' + id).style.display = 'none';
+                document.getElementById('div_expl' + id).style.display = 'block';
+                document.getElementById('onglet_expl' + id).className = 'isbd_public_active';
+                document.getElementById('onglet_expl_loc' + id).className = 'isbd_public_inactive';
+                break;
+            default :
+                quoi= quoi.toLowerCase();
+                var ul = findNoticeElement(id);
+                if (ul) {
+                    var items  = ul.getElementsByTagName('li');
+                    for (var i=0 ; i<items.length ; i++){
+                        if(items[i].getAttribute('id')){
+                            if(items[i].getAttribute('id') == 'onglet_'+quoi+id){
+                                items[i].className = 'isbd_public_active';
+                                document.getElementById('div_'+quoi+id).style.display = 'block';
+                            }else{
+                                if(items[i].className != 'onglet_tags' && items[i].className != 'onglet_avis' && items[i].className != 'onglet_sugg' && items[i].className != 'onglet_basket' && items[i].className != 'onglet_liste_lecture'){
+                                    items[i].className = 'isbd_public_inactive';
+                                    document.getElementById(items[i].getAttribute('id').replace('onglet','div')).style.display = 'none';
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+        }
+    }
+</script>
+<script type="text/javascript" src="./includes/javascript/tablist_ajax.js"></script>
+<script type="text/javascript" src="./includes/javascript/tablist.js"></script>
+<script type="text/javascript" src="./includes/javascript/misc.js"></script>
+<div id="att" style="z-Index:1000"></div>
+<div id="container"><div id="main"><div id="main_header"><h3>Des services pour PMB</h3></div><div id="main_hors_footer">
+
+    <script type="text/javascript" src="./includes/javascript/auth_popup.js"></script>
+    <div id="intro_message"><div class="p1"><a href="index.php?lvl=index"><img src="./images/bar_spacer.gif" id="map_lien_retour" alt=""></a>
+        <a href="http://www.sigb.net" id="puce">Sigb.Net</a>
+        <a href="http://www.sigb.net/wiki/" id="puce">WiKi PMB</a>
+        <a href="http://fr.wikipedia.org" id="puce">WiKipedia</a>
+    </div><div class="p2"></div></div><div id="navigator">
+    <table width="100%"><tbody><tr><td class="navig_actions_last_search"><a href="index.php?lvl=search_result&amp;get_query=1" class="actions_last_search"><span>Modifier la recherche</span></a></td>
+        <td class="navig_actions_history"><a href="index.php?lvl=search_history" class="actions_history"><span>Historique</span></a></td>
+        <td class="navig_actions_first_screen"><a href="./index.php?lvl=index" class="navig_etageres"><span>Nouvelle recherche</span></a></td>
+    </tr></tbody></table></div><!-- fermeture de #navigator -->
+    <div id="resume_panier" class="empty"></div><div id="search">
+    <script src="includes/javascript/ajax.js"></script>
+    <script>var operators_to_enable = new Array();</script>
+    <ul class="search_tabs">
+        <li><a href="./index.php?search_type_asked=simple_search">Recherche simple</a></li>
+
+        <li id="current"><a href="./index.php?search_type_asked=extended_search">Recherche multi-critères</a></li><li><a href="./index.php?search_type_asked=term_search">Recherche par termes</a></li>
+        <li><a href="./index.php?search_type_asked=external_search&amp;external_type=simple">Interrogation externe</a></li>
+    </ul>
+    <div id="search_crl"></div>
+    <form class="form-" name="search_form" id="search_form" action="./index.php?lvl=index&amp;search_type_asked=extended_search" method="post" onsubmit="enable_operators();valid_form_extented_search();">
+        <div class="form-contenu"><div id="choose_criteria">Ajouter un critère de recherche sur</div> <select name="add_field" id="add_field" onchange="if (this.form.add_field.value!='') { enable_operators();this.form.action='./index.php?lvl=index&amp;search_type_asked=extended_search'; this.form.target=''; if(this.form.launch_search)this.form.launch_search.value=0; this.form.submit();} else { alert('choisissez un champ...'); }">
+            <option value="" style="color:#000000">choisissez un champ...</option>
+            <optgroup label="Champs principaux" class="optgroup_multicriteria">
+                <option value="f_1" style="color:#000000">Titre</option>
+                <option value="f_42" style="color:#000000">Tous les champs</option>
+                <option value="f_2" style="color:#000000">Auteur</option>
+                <option value="f_25" style="color:#000000">Type d'auteur</option>
+                <option value="f_3" style="color:#000000">Editeur</option>
+                <option value="f_23" style="color:#000000">Date de publication ou année d'édition</option>
+                <option value="f_4" style="color:#000000">Collection</option>
+                <option value="f_5" style="color:#000000">Sous collection</option>
+                <option value="f_6" style="color:#000000">Série</option>
+                <option value="f_22" style="color:#000000">ISBN, ISSN ou EAN</option>
+                <option value="f_51" style="color:#000000">Titre uniforme</option>
+                <option value="f_72" style="color:#000000">Contenu des documents numériques</option>
+                <option value="f_45" style="color:#000000">Lien électronique dans la notice</option>
+                <option value="f_46" style="color:#000000">Format électronique de la ressource</option>
+                <option value="f_58" style="color:#000000">Nouveautés</option>
+                <option value="f_44" style="color:#000000">Documents numériques</option>
+                <option value="f_73" style="color:#000000">Statut de document numérique</option>
+                <option value="f_94" style="color:#000000">Propriétaire du document numérique</option>
+                <option value="f_95" style="color:#000000">Localisation du document numérique</option>
+            </optgroup>
+            <optgroup label="Notes" class="optgroup_multicriteria">
+                <option value="f_7" style="color:#000000">Note générale</option>
+                <option value="f_8" style="color:#000000">Note de contenu</option>
+                <option value="f_9" style="color:#000000">Note de résumé</option>
+                <option value="f_10" style="color:#000000">Toutes les notes</option>
+            </optgroup>
+            <optgroup label="Indexations" class="optgroup_multicriteria">
+                <option value="f_11" style="color:#000000">Catégories</option>
+                <option value="f_1000" style="color:#000000">Concepts</option>
+                <option value="f_54" style="color:#000000">Catégories et sous-catégories</option>
+                <option value="f_12" style="color:#000000">Indexation décimale</option>
+                <option value="f_13" style="color:#000000">Mots-clés</option>
+            </optgroup>
+            <optgroup label="Langues" class="optgroup_multicriteria">
+                <option value="f_20" style="color:#000000">Langue de publication</option>
+                <option value="f_21" style="color:#000000">Langue originale</option>
+            </optgroup>
+            <optgroup label="Types" class="optgroup_multicriteria">
+                <option value="f_14" style="color:#000000">Document / Périodique / Article</option>
+                <option value="f_15" style="color:#000000">Type de document</option>
+            </optgroup>
+            <optgroup label="Exemplaires" class="optgroup_multicriteria">
+                <option value="f_16" style="color:#000000">Localisation</option>
+                <option value="f_55" style="color:#000000">Sur localisation</option>
+                <option value="f_17" style="color:#000000">Section</option>
+                <option value="f_18" style="color:#000000">Propriétaire</option>
+                <option value="f_19" style="color:#000000">Support</option>
+                <option value="f_24" style="color:#000000">Cote</option>
+                <option value="f_32" style="color:#000000">Code statistique</option>
+            </optgroup>
+            <optgroup label="Périodiques" class="optgroup_multicriteria">
+                <option value="f_28" style="color:#000000">Date de parution du bulletin</option>
+                <option value="f_34" style="color:#000000">Titre du périodique</option>
+                <option value="f_35" style="color:#000000">Numéro de bulletin</option>
+                <option value="f_56" style="color:#000000">Etat des collections localisés</option>
+                <option value="f_57" style="color:#000000">Etat des collections sur-localisés</option>
+            </optgroup>
+            <optgroup label="Autorité : rameau" class="erreur">
+                <option value="authperso_1" style="color:#000000">Tous les champs</option>
+            </optgroup>
+            <optgroup label="Recherches" class="optgroup_multicriteria">
+                <option value="s_1" style="color:#000000">Historique des recherches</option>
+            </optgroup>
+        </select><input type="button" class="bouton button_search_help" name="?" value="Aide" onclick="window.open(&quot;./help.php?whatis=search_multi&quot;, &quot;search_help&quot;, &quot;scrollbars=yes, toolbar=no, dependent=yes, width=400, height=400, resizable=yes&quot;); return false">
+            <br><br>
+            <div class="row">
+                <table id="extended-search-container" class="table-no-border"></table>
+                <input type="hidden" name="explicit_search" value="1">
+                <input type="hidden" name="search_xml_file" value="search_fields">
+
+            </div>
+        </div>
+        <input type="hidden" name="delete_field" value="">
+        <input type="hidden" name="launch_search" value="">
+        <input type="hidden" name="page" value="">
+    </form>
+    <script>ajax_parse_dom()</script>
+    <br>
+
+
+    <script type="text/javascript">
+
+        function valid_form_extented_search() {
+            document.search_form.launch_search.value=1;
+            document.search_form.action='./index.php?lvl=search_result&search_type_asked=extended_search';
+            document.search_form.page.value='';
+
+            // pour retrouver les valeurs des champs si retour par la barre de navigation
+            active_autocomplete();
+            document.search_form.submit();
+        }
+
+        function change_source_checkbox(changing_control, source_id) {
+            var i=0; var count=0;
+            onoff = changing_control.checked;
+            for(i=0; i<document.search_form.elements.length; i++) {
+                if(document.search_form.elements[i].name == 'source[]')	{
+                    if (document.search_form.elements[i].value == source_id)
+                        document.search_form.elements[i].checked = onoff;
+                }
+            }
+        }
+
+        //callback du selecteur d'op?rateur
+        function operatorChanged(field,operator,datatype) {
+            if(datatype == 'date') {
+                switch(operator) {
+                    case 'BETWEEN': // 2eme champ date visible
+                        var part = document.getElementById('field_'+field+'_start_part[]');
+                        if(part){
+                            part.style.display='inline';
+                            part.title='Date de début. Si vide, pas de limite antérieure'
+                        }
+                        var part = document.getElementById('field_'+field+'_end_part[]');
+                        if(part){
+                            part.style.display='inline';
+                            part.title='Date de fin. Si vide, pas de limite de fin'
+                        }
+                        break;
+                    case 'ISEMPTY':
+                    case 'ISNOTEMPTY': // aucun champ date visible
+                        var part = document.getElementById('field_'+field+'_start_part[]');
+                        if(part) part.style.display='none';
+                        var part = document.getElementById('field_'+field+'_end_part[]');
+                        if(part) part.style.display='none';
+                        break;
+                    default : // un seul champ date
+                        var part = document.getElementById('field_'+field+'_start_part[]');
+                        if(part){
+                            part.style.display='block';
+                            part.title=''
+                        }
+                        var part = document.getElementById('field_'+field+'_end_part[]');
+                        if(part) part.style.display='none';
+                        break;
+                }
+                return;
+            }
+            if(	!document.getElementById('field_'+field+'_max_aut') ) return;
+            for(i=0;i<=document.getElementById('field_'+field+'_max_aut').value;i++) {
+                var f_lib = document.getElementById('field_'+field+'_lib_'+i);
+                var f_id = document.getElementById('field_'+field+'_id_'+i);
+                var f = document.getElementById('field_'+field+'_'+i);
+                if(operator == 'AUTHORITY' || (f_lib.getAttribute('completion') && (operator == 'EQ'))) {
+                    //				var authority_id = document.getElementById('fieldvar_'+field+'_authority_id');
+                    //				f_lib.setAttribute('class','authorities ext_search_txt');
+                    //				if(authority_id.value != 0) f.value = authority_id.value;
+                }else {
+                    f_lib.setAttribute('class','ext_search_txt');
+                    f.value = f_lib.value;
+                }
+            }
+        }
+
+        //callback du selecteur AJAX
+        function selectionSelected(infield) {
+            //on enl?ve le dernier _X
+            var tmp_infield = infield.split('_');
+            var tmp_infield_length = tmp_infield.length;
+            //var inc = tmp_infield[tmp_infield_length-1];
+            tmp_infield.pop();
+            infield = tmp_infield.join('_');
+            //pour assurer la compatibilit? avec le selecteur AJAX
+            infield=infield.replace('_lib','');
+
+            var op_name =infield.replace('field','op');
+            var op_selector = document.forms['search_form'][op_name];
+            //on passe le champ en selecteur simple !
+            for (var i=0 ; i<op_selector.options.length ; i++) {
+                if(op_selector.options[i].value == 'EQ')
+                    op_selector.options[i].selected = true;
+            }
+            var empty_line=false;
+            for(i=0;i<=document.getElementById(infield+'_max_aut').value;i++) {
+                var searchField = document.getElementById(infield+'_'+i);
+                var f_lib = document.getElementById(infield+'_lib'+'_'+i);
+                var f_id = document.getElementById(infield+'_id'+'_'+i);
+
+                if(f_lib) {
+                    f_lib.setAttribute('class','ext_search_txt');
+                }
+                if(f_id && f_id.value=='') {
+                    f_id.value=0;
+                }
+                if(f_id) {
+                    if(f_id.value == 0) {
+                        empty_line = true;
+                    }
+                    searchField.value=f_id.value;
+                }
+            }
+            if(!empty_line) {
+                add_line(infield, 'EQ');
+            }
+        }
+
+        //callback du selecteur AJAX pour les autorit?s
+        function authoritySelected(infield) {
+            //on enl?ve le dernier _X
+            var tmp_infield = infield.split('_');
+            var tmp_infield_length = tmp_infield.length;
+            //var inc = tmp_infield[tmp_infield_length-1];
+            tmp_infield.pop();
+            infield = tmp_infield.join('_');
+            //pour assurer la compatibilit? avec le selecteur AJAX
+            infield=infield.replace('_lib','');
+            infield=infield.replace('_authority_label','');
+
+            var op_name =infield.replace('field','op');
+            var op_selector = document.forms['search_form'][op_name];
+            //on passe le champ en selecteur d'autorit? !
+            for (var i=0 ; i<op_selector.options.length ; i++) {
+                if(op_selector.options[i].value == 'AUTHORITY') {
+                    op_selector.options[i].selected = true;
+                    op_selector.disabled=true;
+                }
+            }
+            var empty_line=false;
+            var max_aut = document.getElementById(infield+'_max_aut');
+            if (max_aut) {
+                for(i=0;i<=max_aut.value;i++) {
+                    var searchField = document.getElementById(infield+'_'+i);
+                    var f_lib = document.getElementById(infield+'_lib'+'_'+i);
+                    var f_id = document.getElementById(infield+'_id'+'_'+i);
+                    var authority_id = document.getElementById(infield.replace('field','fieldvar')+'_authority_id'+'_'+i);
+
+                    if(f_lib) {
+                        f_lib.setAttribute('class','authorities ext_search_txt');
+                    }
+                    if(f_id && f_id.value=='') {
+                        f_id.value=0;
+                    }
+                    if(f_id) {
+                        if(f_id.value == 0) {
+                            empty_line = true;
+                        }
+                        searchField.value=f_id.value;
+                        authority_id.value= f_id.value;
+                    }
+                }
+                if(!empty_line && op_selector.value == 'AUTHORITY') {
+                    add_line(infield, 'AUTHORITY');
+                }
+            }
+        }
+
+        //callback sur la saisie libre
+        function fieldChanged(id,inc,value,e) {
+            var ma_touche;
+            if(window.event){
+                ma_touche=window.event.keyCode;
+            }else{
+                ma_touche=e.keyCode;
+            }
+            var f_lib = document.getElementById(id+'_lib_'+inc);
+            var f_id = document.getElementById(id+'_id_'+inc);
+            var f = document.getElementById(id+'_'+inc);
+            var selector = document.forms['search_form'][id.replace('field','op')];
+            if (selector.options[selector.selectedIndex].value != 'AUTHORITY')
+                f.value = value;
+            else if(ma_touche != 13) {
+                var max_aut=document.getElementById(id+'_max_aut').value;
+                if(max_aut>0) {
+                    //Plus d'un champ : on bloque
+                    return;
+                }
+                f_lib.setAttribute('class','ext_search_txt');
+                for (var i=0 ; i<selector.options.length ; i++) {
+                    if (selector.options[i].value == 'BOOLEAN')
+                        selector.selectedIndex = i;
+                }
+                selector.options[0].selected = true;
+                f.value = f_lib.value;
+                if(document.getElementById(id.replace('field','fieldvar')+'_authority_id'+'_'+inc)) {
+                    var authority_id = document.getElementById(id.replace('field','fieldvar')+'_authority_id'+'_'+inc);
+                    authority_id.value = '';
+                }
+            }
+        }
+
+        function add_line(fnamesans, type) {
+
+            var fname=fnamesans+'[]';
+            var fname_id=fnamesans+'_id';
+            var fnamesanslib=fnamesans+'_lib';
+            var fnamelib=fnamesans+'_lib[]';
+            var op=fnamesans.replace('field','op');
+            var tmp_fnamesans = fnamesans.split('_');
+            var search_field_id=tmp_fnamesans[2]+'_'+tmp_fnamesans[3];
+
+            template = document.getElementById('el'+fnamesans);
+            inc=document.getElementById(fnamesans+'_max_aut').value;
+            inc++;
+            line=document.createElement('div');
+            line.setAttribute('class', 'search_group');
+
+            f_id = document.createElement('input');
+            f_id.setAttribute('id',fnamesans+'_'+inc);
+            f_id.setAttribute('name',fname);
+            f_id.setAttribute('value','');
+            f_id.setAttribute('type','hidden');
+
+            f_lib = document.createElement('input');
+            f_lib.setAttribute('autfield',fname_id+'_'+inc);
+            f_lib.setAttribute('onkeyup','fieldChanged(\''+fnamesans+'\',\''+inc+'\',this.value,event)');
+            if(document.getElementById(fnamesanslib+'_0').getAttribute('completion')){
+                f_lib.setAttribute('completion',document.getElementById(fnamesanslib+'_0').getAttribute('completion'));
+                if(f_lib.getAttribute('completion') == 'onto') {
+                    f_lib.setAttribute('att_id_filter', 'http://www.w3.org/2004/02/skos/core#Concept');
+                }
+            }
+            switch(type) {
+                case 'AUTHORITY':
+                    f_lib.setAttribute('callback','authoritySelected');
+                    var fname_name_aut_id=fnamesans+'[authority_id][]';
+                    var fname_name_aut_id=fname_name_aut_id.replace('field','fieldvar');
+                    var fname_aut_id=fnamesans+'_authority_id';
+                    var fname_aut_id=fname_aut_id.replace('field','fieldvar');
+                    f_aut = document.createElement('input');
+                    f_aut.setAttribute('type','hidden');
+                    f_aut.setAttribute('value','');
+                    f_aut.setAttribute('id',fname_aut_id+'_'+inc);
+                    f_aut.setAttribute('name',fname_name_aut_id);
+                    break;
+                case 'EQ':
+                    f_lib.setAttribute('callback','selectionSelected');
+                    f_lib.setAttribute('param1', 'search_fields');
+                    f_lib.setAttribute('param2', search_field_id);
+                    break;
+            }
+            f_lib.setAttribute('id',fnamesanslib+'_'+inc);
+            f_lib.setAttribute('name',fnamelib);
+            f_lib.setAttribute('value','');
+            f_lib.setAttribute('type','text');
+            f_lib.setAttribute('class','ext_search_txt');
+            if(document.getElementById(fnamesanslib+'_0').getAttribute('linkfield')){
+                f_lib.setAttribute('linkfield',document.getElementById(fnamesanslib+'_0').getAttribute('linkfield'));
+            }
+            var op_selected = document.getElementById(op).options[document.getElementById(op).selectedIndex].value;
+            if (op_selected == 'AUTHORITY'){
+                f_lib.setAttribute('class','authorities ext_search_txt');
+            } else if(f_lib.getAttribute('completion') && (op_selected == 'EQ')) {
+                f_lib.setAttribute('class','ext_search_txt');
+            }
+
+            f_search_span = document.createElement('span');
+            f_search_span.setAttribute('class','search_value');
+            f_search_span.appendChild(f_lib);
+
+            f_dico_img = document.createElement('img');
+            f_dico_img.setAttribute('src','./images/dictionnaire.png');
+            f_dico_img.setAttribute('align','middle');
+            f_dico_img.setAttribute('onclick','document.getElementById(\''+fnamesanslib+'_'+inc+'\').focus();simulate_event(\''+fnamesanslib+'_'+inc+'\');');
+            f_dico_span = document.createElement('span');
+            f_dico_span.setAttribute('class','search_dico');
+            f_dico_span.appendChild(f_dico_img);
+
+            f_del = document.createElement('input');
+            f_del.setAttribute('class','bouton vider');
+            f_del.setAttribute('type','button');
+            f_del.setAttribute('onclick','document.getElementById(\''+fnamesanslib+'_'+inc+'\').value=\'\';document.getElementById(\''+fname_id+'_'+inc+'\').value=\'0\';');
+            f_del.setAttribute('value','X');
+
+            f_id2 = document.createElement('input');
+            f_id2.setAttribute('type','hidden');
+            f_id2.setAttribute('value','');
+            f_id2.setAttribute('id',fname_id+'_'+inc);
+            f_id2.setAttribute('name',fname_id);
+
+            line.appendChild(f_id);
+            line.appendChild(f_search_span);
+            line.appendChild(f_dico_span);
+            line.appendChild(f_del);
+            if(type == 'AUTHORITY') {
+                line.appendChild(f_aut);
+            }
+            line.appendChild(f_id2);
+
+            template.appendChild(line);
+
+            ajax_pack_element(f_lib);
+            f_lib.focus();
+
+            document.getElementById(fnamesans+'_max_aut').value=inc;
+
+            //Plus d'un champ : on bloque
+            var selector = document.getElementById(op);
+            selector.disabled=true;
+            if(operators_to_enable.indexOf(op) === -1) {
+                operators_to_enable.push(op);
+            }
+        }
+
+        function enable_operators() {
+            if(operators_to_enable.length>0){
+                for	(index = operators_to_enable.length; index >= 0; index--) {
+                    if(document.getElementById(operators_to_enable[index])) {
+                        document.getElementById(operators_to_enable[index]).disabled=false;
+                    } else {
+                        operators_to_enable.splice(index,1);
+                    }
+                }
+            }
+        }
+
+        function enable_operator(fnamesans, index) {
+            var empty = true;
+            var max = document.getElementById(fnamesans+'_max_aut').value;
+            for(var i = 0; i < max; i++) {
+                if(parseInt(document.getElementById(fnamesans+'_id_'+i).value) != 0) {
+                    empty = false;
+                }
+            }
+            var op_name =fnamesans.replace('field','op');
+            if(empty && operators_to_enable.indexOf(op_name) !== -1) {
+                document.getElementById(op_name).disabled=false;
+            }
+        }
+
+    </script></div>
+</div><!-- fin DIV main_hors_footer --><div id="footer">
+
+<span id="footer_rss">
+
+</span>
+    <span id="footer_link_sup">
+		<a href="./index.php?lvl=infopages&amp;pagesid=7">Mentions légales</a> &nbsp;
+</span>
+
+    <span id="footer_link_website">
+	<a class="footer_biblio_name" href="http://www.sigb.net" title="Bib'Doc">Bib'Doc</a> &nbsp;
+</span>
+
+    <span id="footer_link_pmb">
+<a href="http://www.google.fr" target="_blank">Faire une recherche avec Google</a> &nbsp;
+		<a class="lien_pmb_footer" href="https://www.sigb.net" title="...une solution libre pour la médiathèque..." target="_blank">pmb</a>
+</span>
+
+</div>
+
+</div><!-- /div id=main -->
+
+    <div id="intro">
+        <div id="intro_bibli">
+            <h3>Bib'Doc</h3>
+            <div class="p1"><img src="./styles/genbib/images/big1.jpg">
+                <img src="./styles/genbib/images/big2.jpg">
+                <img src="./styles/genbib/images/big3.jpg"></div>
+            <div class="p2"><ul id="menuDeroulant">
+
+                <li><a href="./index.php">Accueil</a></li>
+                <li><a href="./index.php?lvl=infopages&amp;pagesid=4">Calendrier</a></li>
+                <li><a href="./index.php?lvl=infopages&amp;pagesid=1">Actualités BnF</a>
+                    <ul class="sousMenu">
+                        <li><a href="./index.php?lvl=infopages&amp;pagesid=3">Aide en ligne</a></li>
+                        <li><a href="./index.php?lvl=infopages&amp;pagesid=2">Version 4.0 !</a></li>
+                    </ul>
+                </li>
+
+                <li><a href="./index.php?lvl=infopages&amp;pagesid=6">Nous trouver</a></li>
+
+            </ul></div>
+        </div>
+    </div><!-- /div id=intro -->
+    <div id="bandeau"><div id="accessibility">
+
+        <ul class="accessibility_font_size">
+            <li class="accessibility_font_size_small"><a href="javascript:set_font_size(-1);" title="Réduire le texte">A-</a></li>
+            <li class="accessibility_font_size_normal"><a href="javascript:set_font_size(0);" title="Réinitialiser le texte">A</a></li>
+            <li class="accessibility_font_size_big"><a href="javascript:set_font_size(1);" title="Agrandir le texte">A+</a></li>
+        </ul>
+    </div>
+        <div id="accueil">
+
+            <h3><span onclick="document.location=&quot;./index.php?&quot;" style="cursor: pointer;">Accueil</span></h3>
+            <p class="centered"><a href="index.html"><img src="styles/genbib/images/logoopen.png" border="0" align="middle"></a></p>
+            <div id="lang_select"><h3><span>Sélection de la langue</span></h3><span><form method="post" action="index.php?search_type_asked=extended_search"><select name="lang_sel" onchange="this.form.submit();"><option value="fr_FR" selected="">Français </option><option value="it_IT">Italiano</option><option value="es_ES">Español</option><option value="ca_ES">Català</option><option value="en_UK">English (UK)</option><option value="nl_NL">Nederlands</option><option value="oc_FR">Occitan</option></select></form></span></div>
+
+        </div><!-- fermeture #accueil -->
+        <div id="connexion">
+
+            <h3 class="login_invite">Se connecter</h3><span id="login_form"><form action="index.php?search_type_asked=extended_search" method="post" name="myform"><label>accéder à votre compte de lecteur</label><br>
+				<input type="text" name="login" class="login" size="14" placeholder="identifiant"><br>
+				<input type="password" name="password" class="password" size="8" placeholder="Mot de passe" value="">
+                <input type="hidden" name="force_login" value="1">
+				<input type="submit" name="ok" value="ok" class="bouton"></form><a class="mdp_forgotten" href="./askmdp.php">Mot de passe oublié ?</a></span>
+
+        </div><!-- fermeture #connexion -->
+        <div id="adresse">
+            <span>
+                <h3>Sélectionnez votre centre de documentation</h3>
+    <button class="cdbutton" onclick="Ilo()">Ilo Citoyen</button></br>
+                <button class="cdbutton" onclick="Eureka()">Eurêka</button></br>
+                <button class="cdbutton" onclick="MVW()">MVW</button></br>
+                <button class="cdbutton" onclick="BDW()">MVW-BDW</button></br>
+                <button class="cdbutton" onclick="FHMW()">MVW-FHMW</button></br>
+                <button class="cdbutton" onclick="ARBAL()">ARBAL</button>
+    <h3>Adresse</h3>
+    <p id="demo"></p>
+    <script>
+      function Ilo() {
+          document.getElementById("demo").innerHTML =
+              "</br><h4>Les Chiroux</h4>" +
+              "Centre Culturel de Liège</br>" +
+              "Place des Carmes, 8 - 4000 Liège</br>" +
+              "T : +32(0)4 223 19 60</br>" +
+              "E : <a href=\"mailto:info@chiroux.be\">info@chiroux.be</a>";
+      }
+      function Eureka() {
+          document.getElementById("demo").innerHTML =
+              "</br><h4>Espace Eurêka</h4>" +
+              "Centre de documentation pédagogique</br>" +
+              "Maison Provinciale de la Formation</br>" +
+              "Rue Cockerill, 101 - 4100 Seraing</br>" +
+              "T : +32(0)4 279 34 97</br>" +
+              "E : <a href=\"mailto:espace.eureka@provincedeliege.be\">espace.eureka@provincedeliege.be</a>";
+      }
+      function MVW() {
+          document.getElementById("demo").innerHTML =
+              "</br><h4>Musée de la Vie Wallonne</h4>" +
+              "Cour des Mineurs - 4000 Liège</br>" +
+              "T : +32(0)4 279 20 31</br>" +
+              "E : <a href=\"mailto:info@viewallonne.be\">info@viewallonne.be</a>";
+      }
+      function BDW() {
+          document.getElementById("demo").innerHTML =
+              "</br><h4>Bibliothèque des Dialectes de Wallonie</h4>" +
+              "Musée de la Vie wallonne</br>" +
+              "Rue Moray 3 - 4000 Liège</br>" +
+              "T : +32(0)4 229 28 50</br>" +
+              "E : <a href=\"mailto:bdw@viewallonne.be\">bdw@viewallonne.be</a>";
+      }
+      function FHMW() {
+          document.getElementById("demo").innerHTML =
+              "</br><h4>Fonds d'Histoire du Mouvement Wallon</h4>" +
+              "Musée de la Vie wallonne</br>" +
+              "Cour des Mineurs - 4000 Liège</br>" +
+              "T : +32(0)4 229 28 56</br>" +
+              "E : <a href=\"mailto:fhmw@viewallonne.be\">fhmw@viewallonne.be</a>";
+      }
+      function ARBAL() {
+          document.getElementById("demo").innerHTML =
+              "</br><h4>Académie Royale des Beaux-Arts de Liège</h4>" +
+              "Rue des Anglais 21 - 4000 Liège</br>" +
+              "T : +32(0)4 221 70 72</br>" +
+              "E : <a href=\"mailto:f.vanreeth@intra-esavl.be\">f.vanreeth@intra-esavl.be</a>";
+      }
+    </script></span>
+        </div><!-- fermeture #adresse --></div><div id="bandeau_2"></div></div><!-- /div id=container -->
+
+<script type="text/javascript">init_drag();	//rechercher!!</script>
+
+
+
+<div id="dGrowl_0" class="dGrowl-main dGrowl-topRight" widgetid="dGrowl_0">
+    <!-- $Id: main.html,v 1.2 2016/03/18 10:11:32 apetithomme Exp $ -->
+    <ul data-dojo-attach-point="channelsN"><li class="dGrowl-channel dGrowl-channel-error"></li><li class="dGrowl-channel dGrowl-channel-info"></li></ul>
+</div>
+</body>
+</html>
