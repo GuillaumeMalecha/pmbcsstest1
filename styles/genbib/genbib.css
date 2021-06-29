@@ -204,7 +204,7 @@ iframe#iframe_resume_panier {
 	padding-right: 12px;
 	padding-bottom: 6px;
 	position: relative;
-	border-radius: 5px;
+	border-radius: 15px;
 }
 
 #intro_bibli .p2 ul li:hover, #intro_bibli .p2 #menuDeroulant li:hover, .cms_menu_deep0 li:hover {
