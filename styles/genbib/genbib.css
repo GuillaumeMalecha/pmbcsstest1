@@ -30,7 +30,9 @@ html,body{
 body#pmbopac, #intro #intro_bibli .p2 ul li, .cms_menu_deep0 li, ul.search_tabs li, #onglets_list ul.list_tabs li,
 #empr_onglet ul.empr_tabs li, input.bouton, input.boutonrechercher, #subs_form table td input,
 .carroussel_bulletin .current_bull_carroussel, .carroussel_bulletin .active, th, ul.empr_subtabs li, .authorities {
-	background-color : #222;
+	/*background-color : #222;
+	background-color : #dc7147;*/
+	background-color : #9e4d32;
 }
 
 #intro_message .p1 {
