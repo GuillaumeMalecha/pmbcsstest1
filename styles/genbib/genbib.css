@@ -31,8 +31,9 @@ body#pmbopac, #intro #intro_bibli .p2 ul li, .cms_menu_deep0 li, ul.search_tabs 
 #empr_onglet ul.empr_tabs li, input.bouton, input.boutonrechercher, #subs_form table td input,
 .carroussel_bulletin .current_bull_carroussel, .carroussel_bulletin .active, th, ul.empr_subtabs li, .authorities {
 	/*background-color : #222;
-	background-color : #dc7147;*/
-	background-color : #9e4d32;
+	background-color : #dc7147;
+	background-color : #9e4d32;*/
+	background-color : #bf4a23;
 }
 
 #intro_message .p1 {
@@ -282,7 +283,7 @@ iframe#iframe_resume_panier {
 
 
 #bandeau {
-	 width: 200px;
+	 width: 220px;
 	 padding-left: 10px;
 	 background-color: #ffffff;
 	 float: left;

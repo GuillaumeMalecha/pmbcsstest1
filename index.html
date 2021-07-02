@@ -85,7 +85,8 @@
     <script type="text/javascript" src="./includes/javascript/dojo/dojo/dojo.js"></script>
     <script type="text/javascript">var opac_show_social_network =0;</script>
     <script type="text/javascript" src="./includes/javascript/http_request.js"></script>
-    <script src="https://kit.fontawesome.com/338db63432.js" crossorigin="anonymous"></script>
+    <!--<script src="https://kit.fontawesome.com/338db63432.js" crossorigin="anonymous"></script>-->
+    <script defer src="styles/genbib/js/all.js"></script> <!--load all styles -->
 
 </head>
 <body onload="window.defaultStatus='PMB : Accès public';" id="pmbopac">
@@ -300,9 +301,9 @@
     <div id="intro">
         <div id="intro_bibli">
             <h3>Bib'Doc</h3>
-            <div class="p1"><img src="./styles/genbib/images/big1.jpg">
-                <img src="./styles/genbib/images/big2.jpg">
-                <img src="./styles/genbib/images/big3.jpg"></div>
+            <div class="p1"><img src="./styles/genbib/images/big1nbr.jpg">
+                <img src="./styles/genbib/images/big2nbr.jpg">
+                <img src="./styles/genbib/images/big3nbr.jpg"></div>
             <div class="p2"><ul id="menuDeroulant">
 
                 <li><a href="./index.php">Accueil</a></li>
@@ -330,7 +331,7 @@
         <div id="accueil">
 
             <h3><span onclick="document.location=&quot;./index.php?&quot;" style="cursor: pointer;">Accueil</span></h3>
-            <p class="centered"><a href="./index.php?"><img src="styles/genbib/images/logoopen.png" border="0" align="middle"><!--<i class="fas fa-book-open fa-8x"></i>--><!--<img src="images/site/livre.png" border="0" align="middle">--></a></p>
+            <p class="centered"><a href="./index.php?"><img src="styles/genbib/images/logoopenred.png" border="0" align="middle"><!--<i class="fas fa-book-open fa-8x"></i>--><!--<img src="images/site/livre.png" border="0" align="middle">--></a></p>
             <div id="lang_select"><h3><span>Sélection de la langue</span></h3><span><form method="post" action=""><select name="lang_sel" onchange="this.form.submit();"><option value="fr_FR" selected="">Français </option><option value="it_IT">Italiano</option><option value="es_ES">Español</option><option value="ca_ES">Català</option><option value="en_UK">English (UK)</option><option value="nl_NL">Nederlands</option><option value="oc_FR">Occitan</option></select></form></span></div>
 
         </div><!-- fermeture #accueil -->
